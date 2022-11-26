@@ -1,5 +1,6 @@
 package br.com.up.pokedex.network
 
+import br.com.up.pokedex.model.PokemonDetails
 import br.com.up.pokedex.model.PokeListApiResponse
 import br.com.up.pokedex.model.Pokemon
 import retrofit2.Call
@@ -41,5 +42,22 @@ class Api {
                 }
             }
         )
+    }
+
+    fun getDetailsById(id: String, listener: (PokemonDetails?) -> Unit) {
+        val call = service?.getPokemonById(id)
+
+        call?.enqueue(object : Callback<PokemonDetails>{
+            override fun onResponse(call: Call<PokemonDetails>,
+                                    response: Response<PokemonDetails>) {
+                listener(response.body())
+            }
+
+            override fun onFailure(call: Call<PokemonDetails>,
+                                   t: Throwable) {
+                listener(null)
+            }
+        })
+
     }
 }
